@@ -42,6 +42,11 @@ while true; do
             echo "$selected_service service running start"
             # Add your code for the selected service here
 
+            kubectl delete service $selected_service-service
+            kubectl delete deployment $selected_service-service
+
+            sleep 5
+
             kubectl apply -f database/$selected_service/initdb-config.yml
             kubectl apply -f database/$selected_service/pv-pvc.yml
             kubectl apply -f database/$selected_service/statefulset.yml
