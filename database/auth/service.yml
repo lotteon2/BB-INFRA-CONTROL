@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-db
+  namespace: prod
+  labels:
+    app: auth-db
+spec:
+  type: ClusterIP
+  ports:
+    - name: auth-db
+      port: 3306
+  selector:
+    app: auth-db
+

@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: delivery-initdb-config
+  namespace: prod
+data:
+  initdb.sql: |
+    use delivery;
+    CREATE TABLE `delivery` (
+        `delivery_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `delivery_address_detail` VARCHAR(255) NOT NULL,
+        `delivery_cost` BIGINT NOT NULL,
+        `delivery_orderer_email` VARCHAR(255) NOT NULL,
+        `delivery_orderer_name` VARCHAR(255) NOT NULL,
+        `delivery_orderer_phone_number` VARCHAR(255) NOT NULL,
+        `delivery_recipient_name` VARCHAR(255) NOT NULL,
+        `delivery_recipient_phone_number` VARCHAR(255) NOT NULL,
+        `delivery_request` VARCHAR(255),
+        `delivery_road_name` VARCHAR(255) NOT NULL,
+        `delivery_status` VARCHAR(255) NOT NULL,
+        `delivery_tracking_number` VARCHAR(255),
+        `delivery_zipcode` VARCHAR(255) NOT NULL,
+        PRIMARY KEY (`delivery_id`),
+        UNIQUE KEY `UK_delivery_tracking_number` (`delivery_tracking_number`)
+    );
+
+    CREATE TABLE `delivery_address` (
+        `delivery_address_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `delivery_address_detail` VARCHAR(255) NOT NULL,
+        `delivery_recipient_name` VARCHAR(255) NOT NULL,
+        `delivery_recipient_phone_number` VARCHAR(255) NOT NULL,
+        `delivery_road_name` VARCHAR(255) NOT NULL,
+        `delivery_used_at` TIMESTAMP,
+        `delivery_zipcode` VARCHAR(255) NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        PRIMARY KEY (`delivery_address_id`)
+    );

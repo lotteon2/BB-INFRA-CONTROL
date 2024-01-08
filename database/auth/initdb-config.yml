@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-initdb-config
+  namespace: prod
+data:
+  initdb.sql: |
+    use auth;
+    create table social_auth
+    (
+        oauth_id         bigint      not null
+            primary key,
+        created_at       DATETIME DEFAULT CURRENT_TIMESTAMP null,
+        is_deleted       bit DEFAULT false         null,
+        updated_at       DATETIME DEFAULT CURRENT_TIMESTAMP null,
+        is_recently_out  bit         not null,
+        last_logout_time DATETIME DEFAULT CURRENT_TIMESTAMP null
+    );
+
+    create table email_code
+    (
+        email_code varchar(255) not null
+            primary key,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP  null,
+        is_deleted bit DEFAULT false          null,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP  null,
+        email      varchar(255) not null
+    );
+
+    create table store_manager_auth
+    (
+        id               bigint auto_increment
+            primary key,
+        created_at       DATETIME DEFAULT CURRENT_TIMESTAMP  null,
+        is_deleted       bit DEFAULT false          null,
+        updated_at       DATETIME DEFAULT CURRENT_TIMESTAMP  null,
+        email            varchar(255) not null,
+        last_logout_time DATETIME DEFAULT CURRENT_TIMESTAMP  null,
+        password         varchar(255) not null,
+        status           int          null
+    );

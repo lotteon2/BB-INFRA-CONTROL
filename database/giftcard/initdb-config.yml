@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: giftcard-initdb-config
+  namespace: prod
+data:
+  initdb.sql: |
+    use giftcard;
+    CREATE TABLE IF NOT EXISTS card_template
+    (
+    card_template_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    color       VARCHAR(50)  NOT NULL,
+    image_url   VARCHAR(255) NOT NULL
+    );
+    
+    
+    CREATE TABLE IF NOT EXISTS gift_card (
+    card_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    content LONGTEXT NOT NULL,
+    created_at       DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+    order_product_id BIGINT NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    user_id BIGINT DEFAULT NULL,
+    card_template_id BIGINT NOT NULL,
+    FOREIGN KEY (card_template_id) REFERENCES `card_template` (card_template_id)
+    );
+    insert into card_template (color, image_url)
+        VALUE
+        ('blue', 'https://blooming.blooms.mall.stockey.kr/giftcards/blue/blue1.png'),
+        ('blue', 'https://blooming.blooms.mall.stockey.kr/giftcards/blue/blue2.png'),
+        ('blue', 'https://blooming.blooms.mall.stockey.kr/giftcards/blue/blue3.png'),
+        ('blue', 'https://blooming.blooms.mall.stockey.kr/giftcards/blue/blue4.png'),
+        ('blue', 'https://blooming.blooms.mall.stockey.kr/giftcards/blue/blue5.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix1.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix2.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix3.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix4.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix5.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix6.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix7.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix8.png'),
+        ('mix', 'https://blooming.blooms.mall.stockey.kr/giftcards/mix/mix9.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink1.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink2.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink3.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink4.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink5.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink6.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink7.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink8.png'),
+        ('pink', 'https://blooming.blooms.mall.stockey.kr/giftcards/pink/pink9.png'),
+        ('purple', 'https://blooming.blooms.mall.stockey.kr/giftcards/purple/purple1.png'),
+        ('purple', 'https://blooming.blooms.mall.stockey.kr/giftcards/purple/purple2.png'),
+        ('purple', 'https://blooming.blooms.mall.stockey.kr/giftcards/purple/purple3.png'),
+        ('purple', 'https://blooming.blooms.mall.stockey.kr/giftcards/purple/purple4.png'),
+        ('purple', 'https://blooming.blooms.mall.stockey.kr/giftcards/purple/purple5.png'),
+        ('purple', 'https://blooming.blooms.mall.stockey.kr/giftcards/purple/purple6.png'),
+        ('white', 'https://blooming.blooms.mall.stockey.kr/giftcards/white/white1.png'),
+        ('white', 'https://blooming.blooms.mall.stockey.kr/giftcards/white/white2.png'),
+        ('white', 'https://blooming.blooms.mall.stockey.kr/giftcards/white/white3.png'),
+        ('white', 'https://blooming.blooms.mall.stockey.kr/giftcards/white/white4.png'),
+        ('white', 'https://blooming.blooms.mall.stockey.kr/giftcards/white/white5.png'),
+        ('white', 'https://blooming.blooms.mall.stockey.kr/giftcards/white/white6.png'),
+        ('yellow', 'https://blooming.blooms.mall.stockey.kr/giftcards/yellow/yellow1.png'),
+        ('yellow', 'https://blooming.blooms.mall.stockey.kr/giftcards/yellow/yellow2.png'),
+        ('yellow', 'https://blooming.blooms.mall.stockey.kr/giftcards/yellow/yellow3.png'),
+        ('yellow', 'https://blooming.blooms.mall.stockey.kr/giftcards/yellow/yellow4.png'),
+        ('yellow', 'https://blooming.blooms.mall.stockey.kr/giftcards/yellow/yellow5.png'),
+        ('yellow', 'https://blooming.blooms.mall.stockey.kr/giftcards/yellow/yellow6.png');

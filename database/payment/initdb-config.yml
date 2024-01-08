@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-initdb-config
+  namespace: prod
+data:
+  initdb.sql: |
+    use payment;
+    CREATE TABLE `payment` (
+        `payment_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) null,
+        `order_id` VARCHAR(255) NOT NULL,
+        `order_type` VARCHAR(255) NOT NULL,
+        `payment_actual_amount` BIGINT NOT NULL,
+        `payment_cid` VARCHAR(255) NOT NULL,
+        `payment_status` VARCHAR(255) NOT NULL,
+        `payment_tid` VARCHAR(255) NOT NULL,
+        `payment_type` VARCHAR(255) NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        PRIMARY KEY (`payment_id`),
+        UNIQUE KEY `UK_order_id` (`order_id`)
+    );
+
+    CREATE TABLE `payment_cancel` (
+        `payment_cancel_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) null,
+        `payment_cancel_amount` BIGINT NOT NULL,
+        `payment_cancel_quantity` BIGINT NOT NULL,
+        `payment_cancel_reason` BIGINT NOT NULL,
+        `payment_cancel_status` BIGINT NOT NULL,
+        `payment_id` BIGINT,
+        PRIMARY KEY (`payment_cancel_id`),
+        UNIQUE KEY `UK_payment_cancel_amount` (`payment_cancel_amount`),
+        UNIQUE KEY `UK_payment_cancel_reason` (`payment_cancel_reason`),
+        UNIQUE KEY `UK_payment_cancel_quantity` (`payment_cancel_quantity`),
+        UNIQUE KEY `UK_payment_cancel_status` (`payment_cancel_status`),
+        FOREIGN KEY (`payment_id`) REFERENCES `payment` (`payment_id`)
+    );
+
+    CREATE TABLE `subscription` (
+        `subscription_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) null,
+        `end_date` TIMESTAMP,
+        `order_subscription_id` VARCHAR(255) NOT NULL,
+        `payment_day` VARCHAR(255) NOT NULL,
+        `start_date` TIMESTAMP NOT NULL,
+        `subscription_cid` VARCHAR(255) NOT NULL,
+        `subscription_quantity` BIGINT NOT NULL,
+        `subscription_sid` VARCHAR(255) NOT NULL,
+        `subscription_tid` VARCHAR(255) NOT NULL,
+        `subscription_total_amount` BIGINT NOT NULL,
+        `validity_days` BIGINT NOT NULL,
+        PRIMARY KEY (`subscription_id`),
+        UNIQUE KEY `UK_order_subscription_id` (`order_subscription_id`),
+        UNIQUE KEY `UK_subscription_sid` (`subscription_sid`),
+        UNIQUE KEY `UK_subscription_tid` (`subscription_tid`)
+    );
+
+    CREATE TABLE `subscription_records` (
+        `subscription_records_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) null,
+        `delivery_id` BIGINT NOT NULL,
+        `subscription_status` VARCHAR(255) NOT NULL,
+        `subscription_total_amount` BIGINT NOT NULL,
+        `subcription_id` BIGINT,
+        PRIMARY KEY (`subscription_records_id`),
+        UNIQUE KEY `UK_delivery_id` (`delivery_id`),
+        UNIQUE KEY `UK_subscription_status` (`subscription_status`),
+        UNIQUE KEY `UK_subscription_total_amount` (`subscription_total_amount`),
+        FOREIGN KEY (`subcription_id`) REFERENCES `subscription` (`subscription_id`)
+    );

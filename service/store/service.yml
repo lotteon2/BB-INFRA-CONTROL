@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: store-service
+  namespace: prod
+spec:
+  type: ClusterIP
+  ports:
+    - name: app
+      targetPort: 8700
+      port: 8700
+  selector:
+    app: store-service

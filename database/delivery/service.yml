@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery-db
+  namespace: prod
+  labels:
+    app: delivery-db
+spec:
+  type: ClusterIP
+  ports:
+    - name: delivery-db
+      port: 3306
+  selector:
+    app: delivery-db
+

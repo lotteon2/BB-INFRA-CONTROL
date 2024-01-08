@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-redis
+  namespace: prod
+  labels:
+    location: prod
+spec:
+  capacity:
+    storage: 1Gi # storage 2GB
+  # 블록 디바이스 지원 : awsElasticBlockStore, local volume
+  volumeMode: Filesystem # 파일 시스템 형식
+  # 볼륨 읽기 쓰기 옵션
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: redis # 특정 스토리지 클래스가 있는 pv는 해당 스토리지 클래스에 맞는 pvc 와만 연결됨
+  persistentVolumeReclaimPolicy: Retain # pv가 해제 되었을 때 초기화 옵션
+  # pv 볼륨 플러그인 명시
+  # path 는 마운트 시킬 로컬 서버의 경로
+  hostPath:
+    path: /mnt/data/redis
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-redis
+  namespace: prod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: redis
+  selector:
+    matchLabels:
+      location: prod

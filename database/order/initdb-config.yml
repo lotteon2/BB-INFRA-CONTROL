@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-initdb-config
+  namespace: prod
+data:
+  initdb.sql: |
+    use order;
+    CREATE TABLE `order_delivery` (
+        `order_delivery_id` VARCHAR(255) NOT NULL,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `delivery_id` BIGINT NOT NULL,
+        `order_delivery_coupon_amount` BIGINT NOT NULL,
+        `order_delivery_status` VARCHAR(255) NOT NULL,
+        `order_delivery_total_amount` BIGINT NOT NULL,
+        `store_id` BIGINT NOT NULL,
+        `order_group_id` VARCHAR(255),
+        PRIMARY KEY (`order_delivery_id`)
+    );
+
+    CREATE TABLE `order_delivery_product` (
+        `order_product_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `card_status` VARCHAR(255) NOT NULL,
+        `order_product_price` BIGINT NOT NULL,
+        `order_product_quantity` BIGINT NOT NULL,
+        `product_id` VARCHAR(255) NOT NULL,
+        `review_status` VARCHAR(255) NOT NULL,
+        `order_delivery_id` VARCHAR(255),
+        PRIMARY KEY (`order_product_id`)
+    );
+
+    CREATE TABLE `order_group` (
+        `order_group_id` VARCHAR(255) NOT NULL,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `user_id` BIGINT NOT NULL,
+        PRIMARY KEY (`order_group_id`)
+    );
+
+
+
+
+    CREATE TABLE `order_pickup` (
+        `order_pickup_id` VARCHAR(255) NOT NULL,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `order_pickup_coupon_amount` BIGINT NOT NULL,
+        `order_pickup_datetime` TIMESTAMP NOT NULL,
+        `order_pickup_is_complete` BOOLEAN NOT NULL,
+        `order_pickup_status` VARCHAR(255) NOT NULL,
+        `order_pickup_total_amount` BIGINT NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        PRIMARY KEY (`order_pickup_id`)
+    );
+
+    CREATE TABLE `order_pickup_product` (
+        `order_pickup_product_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `card_is_written` VARCHAR(255) NOT NULL,
+        `order_product_price` BIGINT NOT NULL,
+        `order_product_quantity` BIGINT NOT NULL,
+        `product_id` VARCHAR(255) NOT NULL,
+        `review_is_written` VARCHAR(255) NOT NULL,
+        `order_pickup_id` VARCHAR(255),
+        PRIMARY KEY (`order_pickup_product_id`)
+    );
+
+    CREATE TABLE `order_subscription` (
+        `order_subscription_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `delivery_day` BIGINT NOT NULL,
+        `delivery_id` BIGINT NOT NULL,
+        `product_name` VARCHAR(255) NOT NULL,
+        `product_price` BIGINT NOT NULL,
+        `subscription_product_id` BIGINT NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        PRIMARY KEY (`order_subscription_id`)
+    );
+
+    create table `settlement` (
+        `settlement_id` BIGINT NOT NULL AUTO_INCREMENT,
+        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `is_deleted` bit DEFAULT false null,
+        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        `account_number` varchar(255),
+        `bank_name` varchar(255),
+        `settlement_amount` bigint,
+        `settlement_date` timestamp,
+        `store_id` bigint,
+        `store_name` varchar(255),
+        `total_amount_per_month` bigint,
+        `gugun`  varchar(255),
+        `sido` varchar(255),
+        PRIMARY KEY (`settlement_id`)
+    );
+
+
+
+    -- 외래 키 제약 조건 설정
+    ALTER TABLE `order_delivery` ADD CONSTRAINT `FK_order_group` FOREIGN KEY (`order_group_id`) REFERENCES `order_group` (`order_group_id`);
+    ALTER TABLE `order_pickup_product` ADD CONSTRAINT `FK_order_pickup` FOREIGN KEY (`order_pickup_id`) REFERENCES `order_pickup` (`order_pickup_id`);
+    ALTER TABLE `order_delivery_product` ADD CONSTRAINT `FK_order_delivery` FOREIGN KEY (`order_delivery_id`) REFERENCES `order_delivery` (`order_delivery_id`);

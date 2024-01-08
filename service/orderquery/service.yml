@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderquery-service
+  namespace: prod
+spec:
+  type: ClusterIP
+  ports:
+    - name: app
+      targetPort: 9900
+      port: 9900
+  selector:
+    app: orderquery-service

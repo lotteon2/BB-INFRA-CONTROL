@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+  namespace: prod
+  labels:
+    app: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      name: kafka
+      labels:
+        app: kafka
+    spec:
+      nodeSelector:
+        nodegroup: util
+      containers:
+        - name: kafka
+          image: wurstmeister/kafka
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: kafka-pv
+              mountPath: /var/lib/kafka/data
+          ports:
+            - containerPort: 9093
+          env:
+            - name: KAFKA_PORT
+              value: "9093"
+            - name: KAFKA_ADVERTISED_HOST_NAME
+              value: kafka
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: zookeeper:2181
+            - name: KAFKA_CREATE_TOPICS
+              value: "config-topic:1:1,
+      pickup-create:1:1, 
+      stock-decrease:1:1, 
+      pickup-status-update:1:1, 
+      subscription-date-update:1:1, 
+      unsubscribe:1:1, 
+      store-average-rating-update:1:1, 
+      cart-delete:1:1, 
+      coupon-use:1:1, 
+      stock-decrease:1:1, 
+      order-create:1:1, 
+      order-create-rollback:1:1, 
+      stock-decrease-rollback:1:1,
+      settlement:1:1,
+      order-delivery-status:1:1,
+      subscription-batch:1:1"
+      volumes:
+        - name: kafka-pv
+          persistentVolumeClaim:
+            claimName: pvc-kafka
+      restartPolicy: Always
