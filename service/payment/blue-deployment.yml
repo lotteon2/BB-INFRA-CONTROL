@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service-blue
+  namespace: prod
+  labels:
+    app: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+      color: blue
+  template:
+    metadata:
+      labels:
+        app: payment-service
+        color: blue
+    spec:
+      nodeSelector:
+        nodegroup: cloud4
+      containers:
+        - name: payment-service
+          image: nowgnas/bb:payment
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8100
+          resources:
+            requests:
+              memory: "300Mi"
+          env:
+            - name: USE_PROFILE
+              value: "prod"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8100
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+          # 애플리케이션이 정상 상태를 유지하고 있는지 지속해서 검사
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8100
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+      restartPolicy: Always
+

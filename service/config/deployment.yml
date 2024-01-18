@@ -26,11 +26,7 @@ spec:
             - containerPort: 8888
           resources:
             requests:
-              memory: "350Mi"
-              cpu: "300m"
-            limits:
-              memory: "400Mi"
-              cpu: "300m"
+              memory: "250Mi"
           envFrom:
             - configMapRef:
                 name: config-env

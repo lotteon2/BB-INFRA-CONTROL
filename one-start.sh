@@ -14,6 +14,8 @@ declare -A services=(
     [10]='user'
     [12]='wishlist'
     [13]='apigateway'
+    [14]='discovery'
+    [15]='config'
 )
 
 selected_services=("${!services[@]}")
@@ -37,10 +39,15 @@ while true; do
             echo "Exiting the script"
             exit 0
             ;;
-        [0-9]|1[0-3])
+        [0-9]|1[0-5])
             selected_service=${services[$service_choice]}
             echo "$selected_service service running start"
             # Add your code for the selected service here
+
+#            kubectl delete service $selected_service-db
+#            kubectl delete statefulset $selected_service-db
+#            kubectl delete pvc pvc-$selected_service
+#            kubectl delete pv pv-$selected_service
 
             kubectl delete service $selected_service-service
             kubectl delete deployment $selected_service-service
@@ -64,3 +71,4 @@ while true; do
             ;;
     esac
 done
+

@@ -8,7 +8,7 @@ locals {
 }
 
 resource "aws_s3_bucket" "frontend_s3" {
-  bucket = "blooming-blooms-mall"
+  bucket = "blooming-blooms-shop"
 
   tags = {
     Terraform   = "true"
@@ -79,7 +79,7 @@ resource "aws_cloudfront_distribution" "frontend_cloudfront" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "blooming blooms mall"
+  comment             = "blooming blooms shop"
   default_root_object = "index.html"
 
   default_cache_behavior {
@@ -134,7 +134,7 @@ resource "aws_route53_record" "cloudfront_domain" {
 }
 
 resource "aws_cloudfront_origin_access_control" "cloudfront_origin_access_control" {
-  name                              = "BloomingBloomsMallAccessControl"
+  name                              = "BloomingBloomsShopAccessControl"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"

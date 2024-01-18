@@ -27,11 +27,11 @@ spec:
               mountPath: /data/db
           resources:
             requests:
-              memory: "350Mi"
-              cpu: "250m"
-            limits:
-              memory: "400Mi"
-              cpu: "300m"
+              memory: "256Mi"
+#              cpu: "250m"
+#            limits:
+#              memory: "300Mi"
+#              cpu: "300m"
           # 애플리케이션이 시작된 뒤 초기화 작업이 마무리되어 준비되었는지 검사
           readinessProbe:
             tcpSocket:
@@ -44,6 +44,14 @@ spec:
               port: 27017
             initialDelaySeconds: 20
             periodSeconds: 20
+#        - name: mongodb-exporter
+#          image: percona/mongodb_exporter:latest
+#          env:
+#            - name: MONGODB_URI
+#              value: "mongodb://localhost:27017"  # Update with your MongoDB connection string
+#          ports:
+#            - name: mongodb-exporter
+#              containerPort: 9216
       volumes:
         - name: mongo-data
           persistentVolumeClaim:

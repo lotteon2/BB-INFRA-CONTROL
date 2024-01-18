@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-service
+  namespace: prod
+  labels:
+    app: delivery-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-service
+  template:
+    metadata:
+      name: delivery-service
+      labels:
+        app: delivery-service
+    spec:
+      containers:
+        - name: delivery-service
+          image: nowgnas/bb:delivery
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8300
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "300m"
+            limits:
+              memory: "300Mi"
+              cpu: "350m"
+          env:
+            - name: USE_PROFILE
+              value: "prod"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8300
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+          # 애플리케이션이 정상 상태를 유지하고 있는지 지속해서 검사
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8300
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+      restartPolicy: Always
+

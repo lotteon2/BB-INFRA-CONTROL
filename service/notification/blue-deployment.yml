@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service-blue
+  namespace: prod
+  labels:
+    app: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+      color: blue
+  template:
+    metadata:
+      labels:
+        app: notification-service
+        color: blue
+    spec:
+      containers:
+        - name: notification-service
+          image: nowgnas/bb-notification:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8400
+          resources:
+            requests:
+              memory: "350Mi"
+              cpu: "400m"
+          env:
+            - name: USE_PROFILE
+              value: "prod"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8400
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+          # 애플리케이션이 정상 상태를 유지하고 있는지 지속해서 검사
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8400
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+      restartPolicy: Always
+

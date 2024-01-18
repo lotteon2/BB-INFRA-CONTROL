@@ -20,14 +20,13 @@ spec:
         nodegroup: cloud
       containers:
         - name: user-service
-          image: nowgnas/bb:user
+          image: nowgnas/bb-user:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8600
           resources:
             requests:
               memory: "300Mi"
-              cpu: "250m"
           env:
             - name: USE_PROFILE
               value: "prod"

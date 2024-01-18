@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderquery-service
+  namespace: prod
+  labels:
+    app: orderquery-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderquery-service
+  template:
+    metadata:
+      name: orderquery-service
+      labels:
+        app: orderquery-service
+    spec:
+      containers:
+        - name: orderquery-service
+          image: nowgnas/bb:order-query
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9900
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "300m"
+            limits:
+              memory: "350Mi"
+              cpu: "300m"
+          env:
+            - name: USE_PROFILE
+              value: "prod"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9900
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+          # 애플리케이션이 정상 상태를 유지하고 있는지 지속해서 검사
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 9900
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+      restartPolicy: Always
+

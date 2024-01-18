@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  namespace: prod
+  labels:
+    app: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      name: ollama
+      labels:
+        app: ollama
+    spec:
+#      nodeSelector:
+#        nodegroup: cloud5
+      containers:
+        - name: ollama
+          image: ollama/ollama
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 11434

@@ -6,108 +6,216 @@ metadata:
 data:
   initdb.sql: |
     use order;
+    CREATE TABLE `order_group` (
+      `order_group_id` varchar(255) NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `user_id` bigint NOT NULL,
+      PRIMARY KEY (`order_group_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
     CREATE TABLE `order_delivery` (
-        `order_delivery_id` VARCHAR(255) NOT NULL,
-        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `is_deleted` bit DEFAULT false null,
-        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `delivery_id` BIGINT NOT NULL,
-        `order_delivery_coupon_amount` BIGINT NOT NULL,
-        `order_delivery_status` VARCHAR(255) NOT NULL,
-        `order_delivery_total_amount` BIGINT NOT NULL,
-        `store_id` BIGINT NOT NULL,
-        `order_group_id` VARCHAR(255),
-        PRIMARY KEY (`order_delivery_id`)
-    );
+      `order_delivery_id` varchar(255) NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `delivery_id` bigint NOT NULL,
+      `order_delivery_coupon_amount` bigint NOT NULL,
+      `order_delivery_status` varchar(255) NOT NULL,
+      `order_delivery_total_amount` bigint NOT NULL,
+      `store_id` bigint NOT NULL,
+      `order_group_id` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`order_delivery_id`),
+      KEY `FK2y1p4q8ryo94yo91jk8phmnue` (`order_group_id`),
+      CONSTRAINT `FK2y1p4q8ryo94yo91jk8phmnue` FOREIGN KEY (`order_group_id`) REFERENCES `order_group` (`order_group_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
     CREATE TABLE `order_delivery_product` (
-        `order_product_id` BIGINT NOT NULL AUTO_INCREMENT,
-        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `is_deleted` bit DEFAULT false null,
-        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `card_status` VARCHAR(255) NOT NULL,
-        `order_product_price` BIGINT NOT NULL,
-        `order_product_quantity` BIGINT NOT NULL,
-        `product_id` VARCHAR(255) NOT NULL,
-        `review_status` VARCHAR(255) NOT NULL,
-        `order_delivery_id` VARCHAR(255),
-        PRIMARY KEY (`order_product_id`)
-    );
-
-    CREATE TABLE `order_group` (
-        `order_group_id` VARCHAR(255) NOT NULL,
-        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `is_deleted` bit DEFAULT false null,
-        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `user_id` BIGINT NOT NULL,
-        PRIMARY KEY (`order_group_id`)
-    );
-
-
-
+      `order_product_id` bigint NOT NULL AUTO_INCREMENT,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `card_status` varchar(255) NOT NULL,
+      `order_product_price` bigint NOT NULL,
+      `order_product_quantity` bigint NOT NULL,
+      `product_id` varchar(255) NOT NULL,
+      `review_status` varchar(255) NOT NULL,
+      `order_delivery_id` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`order_product_id`),
+      KEY `FKabygij2l0o6tk8igvw24rj5td` (`order_delivery_id`),
+      CONSTRAINT `FKabygij2l0o6tk8igvw24rj5td` FOREIGN KEY (`order_delivery_id`) REFERENCES `order_delivery` (`order_delivery_id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
     CREATE TABLE `order_pickup` (
-        `order_pickup_id` VARCHAR(255) NOT NULL,
-        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `is_deleted` bit DEFAULT false null,
-        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `order_pickup_coupon_amount` BIGINT NOT NULL,
-        `order_pickup_datetime` TIMESTAMP NOT NULL,
-        `order_pickup_is_complete` BOOLEAN NOT NULL,
-        `order_pickup_status` VARCHAR(255) NOT NULL,
-        `order_pickup_total_amount` BIGINT NOT NULL,
-        `user_id` BIGINT NOT NULL,
-        PRIMARY KEY (`order_pickup_id`)
-    );
+      `order_pickup_id` varchar(255) NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `order_pickup_coupon_amount` bigint NOT NULL,
+      `order_pickup_datetime` datetime(6) NOT NULL,
+      `order_pickup_is_complete` bit(1) NOT NULL,
+      `order_pickup_status` varchar(255) NOT NULL,
+      `order_pickup_total_amount` bigint NOT NULL,
+      `order_pickup_phone_number` varchar(455) NOT NULL,
+      `store_id` bigint NOT NULL,
+      `user_id` bigint NOT NULL,
+      PRIMARY KEY (`order_pickup_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
     CREATE TABLE `order_pickup_product` (
-        `order_pickup_product_id` BIGINT NOT NULL AUTO_INCREMENT,
-        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `is_deleted` bit DEFAULT false null,
-        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `card_is_written` VARCHAR(255) NOT NULL,
-        `order_product_price` BIGINT NOT NULL,
-        `order_product_quantity` BIGINT NOT NULL,
-        `product_id` VARCHAR(255) NOT NULL,
-        `review_is_written` VARCHAR(255) NOT NULL,
-        `order_pickup_id` VARCHAR(255),
-        PRIMARY KEY (`order_pickup_product_id`)
-    );
+      `order_pickup_product_id` bigint NOT NULL AUTO_INCREMENT,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `card_is_written` varchar(255) NOT NULL,
+      `order_product_price` bigint NOT NULL,
+      `order_product_quantity` bigint NOT NULL,
+      `product_id` varchar(255) NOT NULL,
+      `review_is_written` varchar(255) NOT NULL,
+      `order_pickup_id` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`order_pickup_product_id`),
+      KEY `FKhaknlfr41vb0t1mle8cc7jsi` (`order_pickup_id`),
+      CONSTRAINT `FKhaknlfr41vb0t1mle8cc7jsi` FOREIGN KEY (`order_pickup_id`) REFERENCES `order_pickup` (`order_pickup_id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
     CREATE TABLE `order_subscription` (
-        `order_subscription_id` BIGINT NOT NULL AUTO_INCREMENT,
-        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `is_deleted` bit DEFAULT false null,
-        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `delivery_day` BIGINT NOT NULL,
-        `delivery_id` BIGINT NOT NULL,
-        `product_name` VARCHAR(255) NOT NULL,
-        `product_price` BIGINT NOT NULL,
-        `subscription_product_id` BIGINT NOT NULL,
-        `user_id` BIGINT NOT NULL,
-        PRIMARY KEY (`order_subscription_id`)
-    );
-
-    create table `settlement` (
-        `settlement_id` BIGINT NOT NULL AUTO_INCREMENT,
-        `created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `is_deleted` bit DEFAULT false null,
-        `updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
-        `account_number` varchar(255),
-        `bank_name` varchar(255),
-        `settlement_amount` bigint,
-        `settlement_date` timestamp,
-        `store_id` bigint,
-        `store_name` varchar(255),
-        `total_amount_per_month` bigint,
-        `gugun`  varchar(255),
-        `sido` varchar(255),
-        PRIMARY KEY (`settlement_id`)
-    );
+      `order_subscription_id` varchar(255) NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `delivery_day` date NOT NULL,
+      `delivery_id` bigint NOT NULL,
+      `end_date` datetime(6) DEFAULT NULL,
+      `payment_date` datetime(6) NOT NULL,
+      `phone_number` varchar(255) NOT NULL,
+      `product_name` varchar(255) NOT NULL,
+      `review_status` varchar(255) NOT NULL,
+      `product_price` bigint NOT NULL,
+      `store_id` bigint NOT NULL,
+      `subscription_product_id` varchar(255) NOT NULL,
+      `user_id` bigint NOT NULL,
+      `subscription_status` varchar(255) NOT NULL,
+      PRIMARY KEY (`order_subscription_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+    CREATE TABLE `settlement` (
+      `settlement_id` bigint NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `account_number` varchar(255) DEFAULT NULL,
+      `bank_name` varchar(255) DEFAULT NULL,
+      `gugun` varchar(255) DEFAULT NULL,
+      `settlement_amount` bigint DEFAULT NULL,
+      `settlement_date` datetime(6) DEFAULT NULL,
+      `sido` varchar(255) DEFAULT NULL,
+      `store_id` bigint DEFAULT NULL,
+      `store_name` varchar(255) DEFAULT NULL,
+      `total_amount_per_month` bigint DEFAULT NULL,
+      PRIMARY KEY (`settlement_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    
+    -- Autogenerated: do not edit this file
+    CREATE TABLE BATCH_JOB_INSTANCE  (
+    	JOB_INSTANCE_ID BIGINT  NOT NULL PRIMARY KEY ,
+    	VERSION BIGINT ,
+    	JOB_NAME VARCHAR(100) NOT NULL,
+    	JOB_KEY VARCHAR(32) NOT NULL,
+    	constraint JOB_INST_UN unique (JOB_NAME, JOB_KEY)
+    ) ENGINE=InnoDB;
 
-    -- 외래 키 제약 조건 설정
-    ALTER TABLE `order_delivery` ADD CONSTRAINT `FK_order_group` FOREIGN KEY (`order_group_id`) REFERENCES `order_group` (`order_group_id`);
-    ALTER TABLE `order_pickup_product` ADD CONSTRAINT `FK_order_pickup` FOREIGN KEY (`order_pickup_id`) REFERENCES `order_pickup` (`order_pickup_id`);
-    ALTER TABLE `order_delivery_product` ADD CONSTRAINT `FK_order_delivery` FOREIGN KEY (`order_delivery_id`) REFERENCES `order_delivery` (`order_delivery_id`);
+    CREATE TABLE BATCH_JOB_EXECUTION  (
+    	JOB_EXECUTION_ID BIGINT  NOT NULL PRIMARY KEY ,
+    	VERSION BIGINT  ,
+    	JOB_INSTANCE_ID BIGINT NOT NULL,
+    	CREATE_TIME DATETIME(6) NOT NULL,
+    	START_TIME DATETIME(6) DEFAULT NULL ,
+    	END_TIME DATETIME(6) DEFAULT NULL ,
+    	STATUS VARCHAR(10) ,
+    	EXIT_CODE VARCHAR(2500) ,
+    	EXIT_MESSAGE VARCHAR(2500) ,
+    	LAST_UPDATED DATETIME(6),
+    	JOB_CONFIGURATION_LOCATION VARCHAR(2500) NULL,
+    	constraint JOB_INST_EXEC_FK foreign key (JOB_INSTANCE_ID)
+    	references BATCH_JOB_INSTANCE(JOB_INSTANCE_ID)
+    ) ENGINE=InnoDB;
+
+    CREATE TABLE BATCH_JOB_EXECUTION_PARAMS  (
+    	JOB_EXECUTION_ID BIGINT NOT NULL ,
+    	TYPE_CD VARCHAR(6) NOT NULL ,
+    	KEY_NAME VARCHAR(100) NOT NULL ,
+    	STRING_VAL VARCHAR(250) ,
+    	DATE_VAL DATETIME(6) DEFAULT NULL ,
+    	LONG_VAL BIGINT ,
+    	DOUBLE_VAL DOUBLE PRECISION ,
+    	IDENTIFYING CHAR(1) NOT NULL ,
+    	constraint JOB_EXEC_PARAMS_FK foreign key (JOB_EXECUTION_ID)
+    	references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
+    ) ENGINE=InnoDB;
+
+    CREATE TABLE BATCH_STEP_EXECUTION  (
+    	STEP_EXECUTION_ID BIGINT  NOT NULL PRIMARY KEY ,
+    	VERSION BIGINT NOT NULL,
+    	STEP_NAME VARCHAR(100) NOT NULL,
+    	JOB_EXECUTION_ID BIGINT NOT NULL,
+    	START_TIME DATETIME(6) NOT NULL ,
+    	END_TIME DATETIME(6) DEFAULT NULL ,
+    	STATUS VARCHAR(10) ,
+    	COMMIT_COUNT BIGINT ,
+    	READ_COUNT BIGINT ,
+    	FILTER_COUNT BIGINT ,
+    	WRITE_COUNT BIGINT ,
+    	READ_SKIP_COUNT BIGINT ,
+    	WRITE_SKIP_COUNT BIGINT ,
+    	PROCESS_SKIP_COUNT BIGINT ,
+    	ROLLBACK_COUNT BIGINT ,
+    	EXIT_CODE VARCHAR(2500) ,
+    	EXIT_MESSAGE VARCHAR(2500) ,
+    	LAST_UPDATED DATETIME(6),
+    	constraint JOB_EXEC_STEP_FK foreign key (JOB_EXECUTION_ID)
+    	references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
+    ) ENGINE=InnoDB;
+
+    CREATE TABLE BATCH_STEP_EXECUTION_CONTEXT  (
+    	STEP_EXECUTION_ID BIGINT NOT NULL PRIMARY KEY,
+    	SHORT_CONTEXT VARCHAR(2500) NOT NULL,
+    	SERIALIZED_CONTEXT TEXT ,
+    	constraint STEP_EXEC_CTX_FK foreign key (STEP_EXECUTION_ID)
+    	references BATCH_STEP_EXECUTION(STEP_EXECUTION_ID)
+    ) ENGINE=InnoDB;
+
+    CREATE TABLE BATCH_JOB_EXECUTION_CONTEXT  (
+    	JOB_EXECUTION_ID BIGINT NOT NULL PRIMARY KEY,
+    	SHORT_CONTEXT VARCHAR(2500) NOT NULL,
+    	SERIALIZED_CONTEXT TEXT ,
+    	constraint JOB_EXEC_CTX_FK foreign key (JOB_EXECUTION_ID)
+    	references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
+    ) ENGINE=InnoDB;
+
+    CREATE TABLE BATCH_STEP_EXECUTION_SEQ (
+    	ID BIGINT NOT NULL,
+    	UNIQUE_KEY CHAR(1) NOT NULL,
+    	constraint UNIQUE_KEY_UN unique (UNIQUE_KEY)
+    ) ENGINE=InnoDB;
+
+    INSERT INTO BATCH_STEP_EXECUTION_SEQ (ID, UNIQUE_KEY) select * from (select 0 as ID, '0' as UNIQUE_KEY) as tmp where not exists(select * from BATCH_STEP_EXECUTION_SEQ);
+
+    CREATE TABLE BATCH_JOB_EXECUTION_SEQ (
+    	ID BIGINT NOT NULL,
+    	UNIQUE_KEY CHAR(1) NOT NULL,
+    	constraint UNIQUE_KEY_UN unique (UNIQUE_KEY)
+    ) ENGINE=InnoDB;
+
+    INSERT INTO BATCH_JOB_EXECUTION_SEQ (ID, UNIQUE_KEY) select * from (select 0 as ID, '0' as UNIQUE_KEY) as tmp where not exists(select * from BATCH_JOB_EXECUTION_SEQ);
+
+    CREATE TABLE BATCH_JOB_SEQ (
+    	ID BIGINT NOT NULL,
+    	UNIQUE_KEY CHAR(1) NOT NULL,
+    	constraint UNIQUE_KEY_UN unique (UNIQUE_KEY)
+    ) ENGINE=InnoDB;
+
+    INSERT INTO BATCH_JOB_SEQ (ID, UNIQUE_KEY) select * from (select 0 as ID, '0' as UNIQUE_KEY) as tmp where not exists(select * from BATCH_JOB_SEQ);

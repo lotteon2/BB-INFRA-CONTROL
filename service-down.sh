@@ -9,12 +9,24 @@ for ((i=0; i<${#services[@]}; i++)); do
 
   kubectl delete service $service-service
   kubectl delete deployment $service-service
-#  kubectl delete service $service-db
-#  kubectl delete statefulset $service-db
-#  kubectl delete pvc pvc-$service
-#  kubectl delete pv pv-$service
-  echo "Created $service/prod/service.yml"
+  kubectl delete service $service-db
+  kubectl delete statefulset $service-db
+  kubectl delete pvc pvc-$service
+  kubectl delete pv pv-$service
+  echo "$service is down"
 done
 
-#kubectl delete pvc --all -n prod
-#kubectl delete pv --all -n prod
+kubectl delete service kafka
+kubectl delete deployment kafka
+
+kubectl delete service mongodb
+kubectl delete statefulset mongodb
+
+kubectl delete service redis
+kubectl delete statefulset redis
+
+kubectl delete service zookeeper
+kubectl delete deployment zookeeper
+
+kubectl delete pvc --all -n prod
+kubectl delete pv --all -n prod

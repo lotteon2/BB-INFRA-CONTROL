@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-initdb-config
+  namespace: prod
+data:
+  initdb.sql: |
+    use user;
+    create table social_user
+    (
+         id            bigint   auto_increment
+            primary key,
+        email         varchar(255) null,
+        created_at    DATETIME DEFAULT CURRENT_TIMESTAMP  null,
+        is_deleted    bit  DEFAULT false        null,
+        updated_at    DATETIME DEFAULT CURRENT_TIMESTAMP  null,
+        nickname      varchar(255) null,
+        oauth_id      bigint       null,
+        phone_number  varchar(255) null,
+        profile_image varchar(255)  null
+    );
+
+    create table store_manager
+    (
+        id                    bigint       not null 
+            primary key,
+        business_number_image TEXT null,
+        email                 varchar(255) null,
+        name                  varchar(255) null,
+        created_at       DATETIME DEFAULT CURRENT_TIMESTAMP null,
+        is_deleted    bit  DEFAULT false        null,
+        updated_at       DATETIME DEFAULT CURRENT_TIMESTAMP null
+    );

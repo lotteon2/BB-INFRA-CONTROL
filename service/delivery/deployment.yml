@@ -26,11 +26,7 @@ spec:
             - containerPort: 8300
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
-            limits:
-              memory: "400Mi"
-              cpu: "300m"
+              memory: "250Mi"
           env:
             - name: USE_PROFILE
               value: "prod"

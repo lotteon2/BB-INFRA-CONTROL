@@ -17,17 +17,17 @@ spec:
         app: wishlist-service
     spec:
       nodeSelector:
-        nodegroup: cloud
+        nodegroup: cloud2
       containers:
         - name: wishlist-service
-          image: nowgnas/bb:wishlist
+          image: nowgnas/bb-wishlist:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8500
           resources:
             requests:
               memory: "300Mi"
-              cpu: "250m"
+#              cpu: "250m"
           env:
             - name: USE_PROFILE
               value: "prod"

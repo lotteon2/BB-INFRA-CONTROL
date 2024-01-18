@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-initdb-config
+  namespace: prod
+data:
+  initdb.sql: |
+    use order;
+    CREATE TABLE `order_group` (
+      `order_group_id` varchar(255) NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `user_id` bigint NOT NULL,
+      PRIMARY KEY (`order_group_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `order_delivery` (
+      `order_delivery_id` varchar(255) NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `delivery_id` bigint NOT NULL,
+      `order_delivery_coupon_amount` bigint NOT NULL,
+      `order_delivery_status` varchar(255) NOT NULL,
+      `order_delivery_total_amount` bigint NOT NULL,
+      `store_id` bigint NOT NULL,
+      `order_group_id` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`order_delivery_id`),
+      KEY `FK2y1p4q8ryo94yo91jk8phmnue` (`order_group_id`),
+      CONSTRAINT `FK2y1p4q8ryo94yo91jk8phmnue` FOREIGN KEY (`order_group_id`) REFERENCES `order_group` (`order_group_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `order_delivery_product` (
+      `order_product_id` bigint NOT NULL AUTO_INCREMENT,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `card_status` varchar(255) NOT NULL,
+      `order_product_price` bigint NOT NULL,
+      `order_product_quantity` bigint NOT NULL,
+      `product_id` varchar(255) NOT NULL,
+      `review_status` varchar(255) NOT NULL,
+      `order_delivery_id` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`order_product_id`),
+      KEY `FKabygij2l0o6tk8igvw24rj5td` (`order_delivery_id`),
+      CONSTRAINT `FKabygij2l0o6tk8igvw24rj5td` FOREIGN KEY (`order_delivery_id`) REFERENCES `order_delivery` (`order_delivery_id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `order_pickup` (
+      `order_pickup_id` varchar(255) NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `order_pickup_coupon_amount` bigint NOT NULL,
+      `order_pickup_datetime` datetime(6) NOT NULL,
+      `order_pickup_is_complete` bit(1) NOT NULL,
+      `order_pickup_status` varchar(255) NOT NULL,
+      `order_pickup_total_amount` bigint NOT NULL,
+      `user_id` bigint NOT NULL,
+      `store_id` bigint NOT NULL,
+      PRIMARY KEY (`order_pickup_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `order_pickup_product` (
+      `order_pickup_product_id` bigint NOT NULL AUTO_INCREMENT,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `card_is_written` varchar(255) NOT NULL,
+      `order_product_price` bigint NOT NULL,
+      `order_product_quantity` bigint NOT NULL,
+      `product_id` varchar(255) NOT NULL,
+      `review_is_written` varchar(255) NOT NULL,
+      `order_pickup_id` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`order_pickup_product_id`),
+      KEY `FKhaknlfr41vb0t1mle8cc7jsi` (`order_pickup_id`),
+      CONSTRAINT `FKhaknlfr41vb0t1mle8cc7jsi` FOREIGN KEY (`order_pickup_id`) REFERENCES `order_pickup` (`order_pickup_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `order_subscription` (
+      `order_subscription_id` varchar(255) NOT NULL,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      `delivery_day` date NOT NULL,
+      `delivery_id` bigint NOT NULL,
+      `end_date` datetime(6) DEFAULT NULL,
+      `payment_date` datetime(6) NOT NULL,
+      `phone_number` varchar(255) NOT NULL,
+      `product_name` varchar(255) NOT NULL,
+      `product_price` bigint NOT NULL,
+      `store_id` bigint NOT NULL,
+      `subscription_product_id` varchar(255) NOT NULL,
+      `user_id` bigint NOT NULL,
+      PRIMARY KEY (`order_subscription_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    
+    create table if not exists settlement
+    (
+        settlement_id          bigint       not null
+            primary key,
+      created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+      is_deleted         bit DEFAULT false          null,
+      updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
+        account_number         varchar(255) null,
+        bank_name              varchar(255) null,
+        gugun                  varchar(255) null,
+        settlement_amount      bigint       null,
+        settlement_date        datetime(6)  null,
+        sido                   varchar(255) null,
+        store_id               bigint       null,
+        store_name             varchar(255) null,
+        total_amount_per_month bigint       null
+    );

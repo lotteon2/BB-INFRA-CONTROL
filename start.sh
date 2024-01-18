@@ -65,6 +65,8 @@ while true; do
     case $service_choice in
         0)
             kubectl apply -f service/apigateway/ingress.yml
+            kubectl apply -f kube-util/prometheus/deployment-service.yml
+            kubectl apply -f kube-util/grafana/deploy-grafana.yml
             echo "Exiting the script"
             exit 0
             ;;

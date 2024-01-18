@@ -1,0 +1,153 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: store-initdb-config
+  namespace: prod
+data:
+  initdb.sql: |
+    use store;
+    CREATE TABLE `sido` (
+      `code` varchar(255) NOT NULL,
+      `name` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`code`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `gugun` (
+      `code` varchar(255) NOT NULL,
+      `name` varchar(255) DEFAULT NULL,   
+      `sido_code` varchar(255) NOT NULL,
+      PRIMARY KEY (`code`),
+      KEY `FKmo0wy3m4s7r0a010530y001ig` (`sido_code`),
+      CONSTRAINT `FKmo0wy3m4s7r0a010530y001ig` FOREIGN KEY (`sido_code`) REFERENCES `sido` (`code`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+    CREATE TABLE `store` (
+      `id` bigint NOT NULL AUTO_INCREMENT,
+      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_deleted` bit(1) DEFAULT false NULL,
+      `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `account_number` varchar(255) NOT NULL,
+      `average_rating` float NOT NULL DEFAULT '0',
+      `bank` varchar(255) NOT NULL,
+      `detail_info` varchar(255) NOT NULL,
+      `phone_number` varchar(255) NOT NULL,
+      `store_code` varchar(255) NOT NULL,
+      `store_manager_id` bigint NOT NULL,
+      `store_name` varchar(255) NOT NULL,
+      `monthly_sales_revenue` bigint NOT NULL DEFAULT '0',
+      `store_thumbnail_image` varchar(255) NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `delivery_policy` (
+      `id` bigint NOT NULL AUTO_INCREMENT,
+      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_deleted` bit(1) DEFAULT false NULL,
+      `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `delivery_price` bigint NOT NULL,
+      `free_delivery_min_price` bigint NOT NULL,
+      `store_id` bigint DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      KEY `FKh4826a7siy7t3fcifku371j16` (`store_id`),
+      CONSTRAINT `FKh4826a7siy7t3fcifku371j16` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `store_address` (
+      `id` bigint NOT NULL AUTO_INCREMENT,
+      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_deleted` bit(1) DEFAULT false NULL,
+      `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `address` varchar(255) NOT NULL,
+      `detail_address` varchar(255) NOT NULL,
+      `lat` double NOT NULL,
+      `lon` double NOT NULL,
+      `zip_code` varchar(255) NOT NULL,
+      `gugun_code` varchar(255) DEFAULT NULL,
+      `sido_code` varchar(255) DEFAULT NULL,
+      `store_id` bigint DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      KEY `FKtf1wxbnimrsetxx9ehd2ee2tn` (`gugun_code`),
+      KEY `FKk1bni038rsjegrmewrxw84bvi` (`sido_code`),
+      KEY `FK2nf8ejue99xx11ikh2m8adkae` (`store_id`),
+      CONSTRAINT `FK2nf8ejue99xx11ikh2m8adkae` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`),
+      CONSTRAINT `FKk1bni038rsjegrmewrxw84bvi` FOREIGN KEY (`sido_code`) REFERENCES `sido` (`code`),
+      CONSTRAINT `FKtf1wxbnimrsetxx9ehd2ee2tn` FOREIGN KEY (`gugun_code`) REFERENCES `gugun` (`code`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `flower_cargo` (
+      `flower_id` bigint NOT NULL,
+      `store_id` bigint NOT NULL,
+      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_deleted` bit(1) DEFAULT false NULL,
+      `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `flower_name` varchar(255) DEFAULT NULL,
+      `stock` bigint NOT NULL DEFAULT '0',
+      PRIMARY KEY (`flower_id`,`store_id`),
+      KEY `FKq0mwssjfc2s2r2rerofo79an1` (`store_id`),
+      CONSTRAINT `FKq0mwssjfc2s2r2rerofo79an1` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `question` (
+      `id` bigint NOT NULL AUTO_INCREMENT,
+      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_deleted` bit(1) DEFAULT false NULL,
+      `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `content` varchar(255) NOT NULL,
+      `is_read` tinyint(1) NOT NULL DEFAULT '0',
+      `is_secret` tinyint(1) NOT NULL DEFAULT '0',
+      `nickname` varchar(255) NOT NULL,
+      `product_id` varchar(255) NOT NULL,
+      `product_name` varchar(255) NOT NULL,
+      `title` varchar(255) NOT NULL,
+      `user_id` bigint NOT NULL,
+      `store_id` bigint DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      KEY `FKh76hunyr9grd50gpy0l128dyd` (`store_id`),
+      CONSTRAINT `FKh76hunyr9grd50gpy0l128dyd` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `answer` (
+      `id` bigint NOT NULL,
+      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_deleted` bit(1) DEFAULT false NULL,
+      `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `content` varchar(255) NOT NULL,
+      PRIMARY KEY (`id`),
+      CONSTRAINT `FKrbm8pweys4s5fd0k18950p7y0` FOREIGN KEY (`id`) REFERENCES `question` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    CREATE TABLE `coupon` (
+      `id` bigint NOT NULL AUTO_INCREMENT,
+      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_deleted` bit(1) DEFAULT false NULL,
+      `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `coupon_code` varchar(255) NOT NULL,
+      `coupon_name` varchar(255) NOT NULL,
+      `discount_price` bigint NOT NULL,
+      `end_date` date NOT NULL,
+      `limit_count` int NOT NULL,
+      `min_price` bigint NOT NULL,
+      `start_date` date NOT NULL,
+      `store_id` bigint DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      KEY `FKs7yl3mm1m0o7fmn6et7guwo89` (`store_id`),
+      CONSTRAINT `FKs7yl3mm1m0o7fmn6et7guwo89` FOREIGN KEY (`store_id`) REFERENCES `store` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+    CREATE TABLE `issued_coupon` (
+      `coupon_id` bigint NOT NULL,
+      `user_id` bigint NOT NULL,
+      `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_deleted` bit(1) DEFAULT false NULL,
+      `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP NULL,
+      `is_used` tinyint(1) NOT NULL DEFAULT '0',
+      `nickname` varchar(255) NOT NULL,
+      `phone_number` varchar(255) NOT NULL,
+      PRIMARY KEY (`coupon_id`,`user_id`),
+      CONSTRAINT `FK6tlq06yimib5ocxhp6qw0iemg` FOREIGN KEY (`coupon_id`) REFERENCES `coupon` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    
+    INSERT INTO `sido` VALUES ('11','서울'),('26','부산'),('27','대구'),('28','인천'),('29','광주'),('30','대전'),('31','울산'),('36','세종'),('41','경기도'),('42','강원도'),('43','충청북도'),('44','충청남도'),('45','전라북도'),('46','전라남도'),('47','경상북도'),('48','경상남도'),('50','제주특별자치도');
+    INSERT INTO `gugun` VALUES ('11110','종로구','11'),('11140','중구','11'),('11170','용산구','11'),('11200','성동구','11'),('11215','광진구','11'),('11230','동대문구','11'),('11260','중랑구','11'),('11290','성북구','11'),('11305','강북구','11'),('11320','도봉구','11'),('11350','노원구','11'),('11380','은평구','11'),('11410','서대문구','11'),('11440','마포구','11'),('11470','양천구','11'),('11500','강서구','11'),('11530','구로구','11'),('11545','금천구','11'),('11560','영등포구','11'),('11590','동작구','11'),('11620','관악구','11'),('11650','서초구','11'),('11680','강남구','11'),('11710','송파구','11'),('11740','강동구','11'),('26110','중구','26'),('26140','서구','26'),('26170','동구','26'),('26200','영도구','26'),('26230','부산진구','26'),('26260','동래구','26'),('26290','남구','26'),('26320','북구','26'),('26350','해운대구','26'),('26380','사하구','26'),('26410','금정구','26'),('26440','강서구','26'),('26470','연제구','26'),('26500','수영구','26'),('26530','사상구','26'),('26710','기장군','26'),('27110','중구','27'),('27140','동구','27'),('27170','서구','27'),('27200','남구','27'),('27230','북구','27'),('27260','수성구','27'),('27290','달서구','27'),('27710','달성군','27'),('28110','중구','28'),('28140','동구','28'),('28177','미추홀구','28'),('28185','연수구','28'),('28200','남동구','28'),('28237','부평구','28'),('28245','계양구','28'),('28260','서구','28'),('28710','강화군','28'),('28720','옹진군','28'),('29110','동구','29'),('29140','서구','29'),('29155','남구','29'),('29170','북구','29'),('29200','광산구','29'),('30110','동구','30'),('30140','중구','30'),('30170','서구','30'),('30200','유성구','30'),('30230','대덕구','30'),('31110','중구','31'),('31140','남구','31'),('31170','동구','31'),('31200','북구','31'),('31710','울주군','31'),('36110','조치원읍','36'),('41111','수원시','41'),('41131','성남시','41'),('41150','의정부시','41'),('41171','안양시','41'),('41190','부천시','41'),('41210','광명시','41'),('41220','평택시','41'),('41250','동두천시','41'),('41271','안산시','41'),('41281','고양시','41'),('41290','과천시','41'),('41310','구리시','41'),('41360','남양주시','41'),('41370','오산시','41'),('41390','시흥시','41'),('41410','군포시','41'),('41430','의왕시','41'),('41450','하남시','41'),('41461','용인시','41'),('41480','파주시','41'),('41500','이천시','41'),('41550','안성시','41'),('41570','김포시','41'),('41590','화성시','41'),('41610','광주시','41'),('41630','양주시','41'),('41650','포천시','41'),('41670','여주시','41'),('41800','연천군','41'),('41820','가평군','41'),('41830','양평군','41'),('42110','춘천시','42'),('42130','원주시','42'),('42150','강릉시','42'),('42170','동해시','42'),('42190','태백시','42'),('42210','속초시','42'),('42230','삼척시','42'),('42720','홍천군','42'),('42730','횡성군','42'),('42750','영월군','42'),('42760','평창군','42'),('42770','정선군','42'),('42780','철원군','42'),('42790','화천군','42'),('42800','양구군','42'),('42810','인제군','42'),('42820','고성군','42'),('42830','양양군','42'),('43111','청주시','43'),('43130','충주시','43'),('43150','제천시','43'),('43720','보은군','43'),('43730','옥천군','43'),('43740','영동군','43'),('43745','증평군','43'),('43750','진천군','43'),('43760','괴산군','43'),('43770','음성군','43'),('43800','단양군','43'),('44131','천안시','44'),('44133','천안시','44'),('44150','공주시','44'),('44180','보령시','44'),('44200','아산시','44'),('44210','서산시','44'),('44230','논산시','44'),('44250','계룡시','44'),('44270','당진시','44'),('44710','금산군','44'),('44760','부여군','44'),('44770','서천군','44'),('44790','청양군','44'),('44800','홍성군','44'),('44810','예산군','44'),('44825','태안군','44'),('45111','전주시','45'),('45130','군산시','45'),('45140','익산시','45'),('45180','정읍시','45'),('45190','남원시','45'),('45210','김제시','45'),('45710','완주군','45'),('45720','진안군','45'),('45730','무주군','45'),('45740','장수군','45'),('45750','임실군','45'),('45770','순창군','45'),('45790','고창군','45'),('45800','부안군','45'),('46110','목포시','46'),('46130','여수시','46'),('46150','순천시','46'),('46170','나주시','46'),('46230','광양시','46'),('46710','담양군','46'),('46720','곡성군','46'),('46730','구례군','46'),('46770','고흥군','46'),('46780','보성군','46'),('46790','화순군','46'),('46800','장흥군','46'),('46810','강진군','46'),('46820','해남군','46'),('46830','영암군','46'),('46840','무안군','46'),('46860','함평군','46'),('46870','영광군','46'),('46880','장성군','46'),('46890','완도군','46'),('46900','진도군','46'),('46910','신안군','46'),('47111','포항시','47'),('47130','경주시','47'),('47150','김천시','47'),('47170','안동시','47'),('47190','구미시','47'),('47210','영주시','47'),('47230','영천시','47'),('47250','상주시','47'),('47280','문경시','47'),('47290','경산시','47'),('47720','군위군','47'),('47730','의성군','47'),('47750','청송군','47'),('47760','영양군','47'),('47770','영덕군','47'),('47820','청도군','47'),('47830','고령군','47'),('47840','성주군','47'),('47850','칠곡군','47'),('47900','예천군','47'),('47920','봉화군','47'),('47930','울진군','47'),('47940','울릉군','47'),('48121','창원시','48'),('48170','진주시','48'),('48220','통영시','48'),('48240','사천시','48'),('48250','김해시','48'),('48270','밀양시','48'),('48310','거제시','48'),('48330','양산시','48'),('48720','의령군','48'),('48730','함안군','48'),('48740','창녕군','48'),('48820','고성군','48'),('48840','남해군','48'),('48850','하동군','48'),('48860','산청군','48'),('48870','함양군','48'),('48880','거창군','48'),('48890','합천군','48'),('50110','제주시','50'),('50130','서귀포시','50');

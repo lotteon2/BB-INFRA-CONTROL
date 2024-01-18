@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: prod
+  name: order-batch-service
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hello
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - date; echo Hello from the kube cluster
+          restartPolicy: OnFailure
+  schedule: "*/1 * * * *" # 1분마다 실행

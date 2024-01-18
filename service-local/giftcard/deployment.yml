@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: giftcard-service
+  namespace: prod
+  labels:
+    app: giftcard-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: giftcard-service
+  template:
+    metadata:
+      name: giftcard-service
+      labels:
+        app: giftcard-service
+    spec:
+      containers:
+        - name: giftcard-service
+          image: nowgnas/bb-giftcard:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9100
+          resources:
+            requests:
+              memory: "400Mi"
+              cpu: "300m"
+          env:
+            - name: USE_PROFILE
+              value: "prod"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9100
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+          # 애플리케이션이 정상 상태를 유지하고 있는지 지속해서 검사
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 9100
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 2
+      restartPolicy: Always
+

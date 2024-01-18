@@ -50,7 +50,8 @@ spec:
       stock-decrease-rollback:1:1,
       settlement:1:1,
       order-delivery-status:1:1,
-      subscription-batch:1:1"
+      subscription-batch:1:1,
+      order-subscription-status:1:1"
       volumes:
         - name: kafka-pv
           persistentVolumeClaim:

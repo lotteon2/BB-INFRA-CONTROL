@@ -15,7 +15,7 @@ spec:
         app: redis
     spec:
       nodeSelector:
-        nodegroup: util
+        nodegroup: cloud2
       containers:
         - name: redis
           image: redis:latest
@@ -32,11 +32,11 @@ spec:
             - "123456"
           resources:
             requests:
-              memory: "300Mi"
-              cpu: "250m"
-            limits:
-              memory: "400Mi"
-              cpu: "300m"
+              memory: "256Mi"
+#              cpu: "250m"
+#            limits:
+#              memory: "300Mi"
+#              cpu: "300m"
           # 애플리케이션이 시작된 뒤 초기화 작업이 마무리되어 준비되었는지 검사
           readinessProbe:
             tcpSocket:

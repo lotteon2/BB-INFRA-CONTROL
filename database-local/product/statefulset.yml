@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: product-db
+  namespace: prod
+spec:
+  selector:
+    matchLabels:
+      app: product-db
+  serviceName: product-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: product-db
+    spec:
+      containers:
+        - name: product-db
+          image: mysql:latest
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "123456"
+            - name: MYSQL_DATABASE
+              value: product
+          ports:
+            - name: product-db
+              containerPort: 3306
+          volumeMounts:
+            - name: product-initdb
+              mountPath: /docker-entrypoint-initdb.d
+            - name: mysql
+              mountPath: /etc/mysql/conf.d
+          # 애플리케이션이 시작된 뒤 초기화 작업이 마무리되어 준비되었는지 검사
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          # 애플리케이션이 정상 상태를 유지하고 있는지 지속해서 검사
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 20
+            periodSeconds: 20
+      volumes:
+        - name: product-initdb
+          configMap:
+            name: product-initdb-config
+        - name: mysql
+          configMap:
+            name: mysql
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-product
