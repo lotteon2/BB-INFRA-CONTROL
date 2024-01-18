@@ -17,6 +17,8 @@ spec:
         app: order-service
         color: green
     spec:
+      nodeSelector:
+        nodegroup: cloud3
       containers:
         - name: order-service
           image: nowgnas/bb:order
