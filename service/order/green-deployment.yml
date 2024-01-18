@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service-blue
+  name: order-service-green
   namespace: prod
   labels:
     app: order-service
@@ -10,12 +10,12 @@ spec:
   selector:
     matchLabels:
       app: order-service
-      color: blue
+      color: green
   template:
     metadata:
       labels:
         app: order-service
-        color: blue
+        color: green
     spec:
       containers:
         - name: order-service
