@@ -59,12 +59,9 @@ while true; do
                 kubectl scale deployment $selected_service-service-blue --replicas=0
 
                 echo "Blue deployment applied, and blue deployment scaled down."
-            else
-              echo "blue service is unavailable"
-              exit 1
-            fi
+
             # Check if product-service-green deployment is running
-            if kubectl get deployment $selected_service-service-green &> /dev/null; then
+            elif kubectl get deployment $selected_service-service-green &> /dev/null; then
                 echo "$selected_service-service-blue deployment not found."
                 # Apply product-service-blue deployment
                 kubectl apply -f service/$selected_service/blue-deployment.yml
