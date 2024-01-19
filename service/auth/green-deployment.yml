@@ -1,28 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service-green
+  name: auth-service-green
   namespace: prod
   labels:
-    app: order-service
+    app: auth-service
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: order-service
+      app: auth-service
       color: green
   template:
     metadata:
       labels:
-        app: order-service
+        app: auth-service
         color: green
     spec:
+#      nodeSelector:
+#        nodegroup: cloud2
       containers:
-        - name: order-service
-          image: nowgnas/bb-order:latest
+        - name: auth-service
+          image: nowgnas/bb-auth:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8900
+            - containerPort: 9000
           resources:
             requests:
               memory: "300Mi"
@@ -32,7 +34,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8900
+              port: 9000
             initialDelaySeconds: 30
             periodSeconds: 30
             timeoutSeconds: 2
@@ -40,7 +42,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8900
+              port: 9000
             initialDelaySeconds: 30
             periodSeconds: 30
             timeoutSeconds: 2

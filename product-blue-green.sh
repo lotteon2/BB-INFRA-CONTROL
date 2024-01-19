@@ -1,6 +1,6 @@
 
 # Check if product-service-blue deployment is running
-if kubectl get deployment product-service-blue &> /dev/null; then
+if kubectl get deployment product-service-blue | grep "2/2" &> /dev/null; then
     # Apply product-service-green deployment
     kubectl apply -f service/product/green-deployment.yml
 
@@ -16,7 +16,7 @@ if kubectl get deployment product-service-blue &> /dev/null; then
     echo "Blue deployment applied, and blue deployment scaled down."
 
 # Check if product-service-green deployment is running
-elif kubectl get deployment product-service-green &> /dev/null; then
+elif kubectl get deployment product-service-green | grep "2/2" &> /dev/null; then
     echo "product-service-blue deployment not found."
     # Apply product-service-blue deployment
     kubectl apply -f service/product/blue-deployment.yml
@@ -35,3 +35,4 @@ else
     echo "product-service-green deployment not found."
     exit 1
 fi
+

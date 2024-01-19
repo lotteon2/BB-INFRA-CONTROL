@@ -1,38 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service-green
+  name: user-service-green
   namespace: prod
   labels:
-    app: order-service
+    app: user-service
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: order-service
+      app: user-service
       color: green
   template:
     metadata:
       labels:
-        app: order-service
+        app: user-service
         color: green
     spec:
+#      nodeSelector:
+#        nodegroup: cloud
       containers:
-        - name: order-service
-          image: nowgnas/bb-order:latest
+        - name: user-service
+          image: nowgnas/bb-user:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8900
+            - containerPort: 8600
           resources:
             requests:
-              memory: "300Mi"
+              memory: "250Mi"
           env:
             - name: USE_PROFILE
               value: "prod"
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8900
+              port: 8600
             initialDelaySeconds: 30
             periodSeconds: 30
             timeoutSeconds: 2
@@ -40,7 +42,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8900
+              port: 8600
             initialDelaySeconds: 30
             periodSeconds: 30
             timeoutSeconds: 2

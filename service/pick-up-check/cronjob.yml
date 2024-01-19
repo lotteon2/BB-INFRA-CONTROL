@@ -8,19 +8,10 @@ spec:
     spec:
       template:
         spec:
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                  - matchExpressions:
-                      - key: nodegroup
-                        operator: In
-                        values:
-                          - util
           containers:
             - name: curl-container
               image: lucashalbert/curl:latest  # Use a Docker image with curl installed
               args:
                 - "http://order-service:8900/client/change"
           restartPolicy: OnFailure
-  schedule: "*/1 * * * *"
+  schedule: "*/10 * * * *"

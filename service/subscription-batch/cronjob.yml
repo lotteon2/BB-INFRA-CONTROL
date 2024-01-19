@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: prod
+  name: subscription-batch
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: subscription-batch
+              image: nowgnas/bb-subscription-batch:latest  # Use a Docker image with curl installed
+              env:
+                - name: USE_PROFILE
+                  value: prod
+          restartPolicy: OnFailure
+  schedule: "*/10 * * * *"

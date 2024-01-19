@@ -9,55 +9,22 @@ for ((i=0; i<${#services[@]}; i++)); do
   service_port=${port[i]}
 
   # Create local-service.yml for each service
-  cat <<EOL > "service/$service/blue-deployment.yml"
-apiVersion: apps/v1
-kind: Deployment
+  cat <<EOL > "service/$service/blue-service.yml"
+apiVersion: v1
+kind: Service
 metadata:
-  name: $service-service-blue
+  name: $service-service
   namespace: prod
-  labels:
-    app: $service-service
 spec:
-  replicas: 1
+  type: ClusterIP
+  ports:
+    - name: app
+      targetPort: $service_port
+      port: $service_port
   selector:
-    matchLabels:
-      app: $service-service
-      color: blue
-  template:
-    metadata:
-      labels:
-        app: $service-service
-        color: blue
-    spec:
-      containers:
-        - name: $service-service
-          image: nowgnas/bb-$service:latest
-          imagePullPolicy: Always
-          ports:
-            - containerPort: $service_port
-          resources:
-            requests:
-              memory: "350Mi"
-              cpu: "400m"
-          env:
-            - name: USE_PROFILE
-              value: "prod"
-          readinessProbe:
-            httpGet:
-              path: /actuator/health/readiness
-              port: $service_port
-            initialDelaySeconds: 30
-            periodSeconds: 30
-            timeoutSeconds: 2
-          # 애플리케이션이 정상 상태를 유지하고 있는지 지속해서 검사
-          livenessProbe:
-            httpGet:
-              path: /actuator/health/liveness
-              port: $service_port
-            initialDelaySeconds: 30
-            periodSeconds: 30
-            timeoutSeconds: 2
-      restartPolicy: Always
+    app: $service-service
+    color: blue
+
 
 EOL
 

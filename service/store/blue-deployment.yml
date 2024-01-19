@@ -6,7 +6,7 @@ metadata:
   labels:
     app: store-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: store-service
@@ -17,6 +17,8 @@ spec:
         app: store-service
         color: blue
     spec:
+#      nodeSelector:
+#        nodegroup: cloud4
       containers:
         - name: store-service
           image: nowgnas/bb-store:latest
@@ -25,7 +27,7 @@ spec:
             - containerPort: 8700
           resources:
             requests:
-              memory: "300Mi"
+              memory: "250Mi"
           env:
             - name: USE_PROFILE
               value: "prod"

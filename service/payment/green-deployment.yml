@@ -6,7 +6,7 @@ metadata:
   labels:
     app: payment-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: payment-service
@@ -17,8 +17,8 @@ spec:
         app: payment-service
         color: green
     spec:
-      nodeSelector:
-        nodegroup: util
+#      nodeSelector:
+#        nodegroup: cloud4
       containers:
         - name: payment-service
           image: nowgnas/bb:payment
@@ -27,7 +27,7 @@ spec:
             - containerPort: 8100
           resources:
             requests:
-              memory: "300Mi"
+              memory: "250Mi"
           env:
             - name: USE_PROFILE
               value: "prod"

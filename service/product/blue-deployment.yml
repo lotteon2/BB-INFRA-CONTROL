@@ -17,8 +17,8 @@ spec:
         app: product-service
         color: blue
     spec:
-      nodeSelector:
-        nodegroup: cloud
+#      nodeSelector:
+#        nodegroup: cloud
       containers:
         - name: product-service
           image: nowgnas/bb-product:latest

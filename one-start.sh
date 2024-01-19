@@ -49,18 +49,18 @@ while true; do
 #            kubectl delete pvc pvc-$selected_service
 #            kubectl delete pv pv-$selected_service
 
-            kubectl delete service $selected_service-service
-            kubectl delete deployment $selected_service-service
+#            kubectl delete service $selected_service-service
+#            kubectl delete deployment $selected_service-service
 
             sleep 5
 
-            kubectl apply -f database/$selected_service/initdb-config.yml
-            kubectl apply -f database/$selected_service/pv-pvc.yml
-            kubectl apply -f database/$selected_service/statefulset.yml
+#            kubectl apply -f database/$selected_service/initdb-config.yml
+#            kubectl apply -f database/$selected_service/pv-pvc.yml
+#            kubectl apply -f database/$selected_service/statefulset.yml
             kubectl apply -f database/$selected_service/service.yml
 
-            kubectl apply -f service/$selected_service/deployment.yml
-            kubectl apply -f service/$selected_service/service.yml
+#            kubectl apply -f service/$selected_service/deployment.yml
+#            kubectl apply -f service/$selected_service/service.yml
 
             # Update the available services for the next iteration
             unset "services[$service_choice]"

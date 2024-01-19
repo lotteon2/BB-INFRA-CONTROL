@@ -80,8 +80,8 @@ while true; do
             kubectl apply -f database/$selected_service/statefulset.yml
             kubectl apply -f database/$selected_service/service.yml
 
-            kubectl apply -f service/$selected_service/deployment.yml
-            kubectl apply -f service/$selected_service/service.yml
+            kubectl apply -f service/$selected_service/blue-deployment.yml
+            kubectl apply -f service/$selected_service/blue-service.yml
 
             # Update the available services for the next iteration
             unset "services[$service_choice]"

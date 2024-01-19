@@ -17,6 +17,8 @@ spec:
         app: notification-service
         color: blue
     spec:
+#      nodeSelector:
+#        nodegroup: cloud2
       containers:
         - name: notification-service
           image: nowgnas/bb-notification:latest
@@ -25,8 +27,7 @@ spec:
             - containerPort: 8400
           resources:
             requests:
-              memory: "350Mi"
-              cpu: "400m"
+              memory: "250Mi"
           env:
             - name: USE_PROFILE
               value: "prod"

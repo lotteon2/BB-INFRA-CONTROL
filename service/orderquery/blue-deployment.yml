@@ -17,6 +17,8 @@ spec:
         app: orderquery-service
         color: blue
     spec:
+#      nodeSelector:
+#        nodegroup: util
       containers:
         - name: orderquery-service
           image: nowgnas/bb-orderquery:latest
@@ -25,8 +27,7 @@ spec:
             - containerPort: 9900
           resources:
             requests:
-              memory: "350Mi"
-              cpu: "400m"
+              memory: "250Mi"
           env:
             - name: USE_PROFILE
               value: "prod"

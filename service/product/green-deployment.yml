@@ -17,8 +17,6 @@ spec:
         app: product-service
         color: green
     spec:
-      nodeSelector:
-        nodegroup: cloud
       containers:
         - name: product-service
           image: nowgnas/bb-product:latest
@@ -30,8 +28,6 @@ spec:
               memory: "300Mi"
           env:
             - name: USE_PROFILE
-              value: "prod"
-            - name: SPRING_CONFIG_ACTIVATE_ON_PROFILE
               value: "prod"
           readinessProbe:
             httpGet:
