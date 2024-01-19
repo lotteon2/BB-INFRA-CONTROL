@@ -10,6 +10,8 @@ if kubectl get deployment orderquery-service-blue | grep "1/1" &> /dev/null; the
         sleep 5
     done
 
+    kubectl patch service orderquery-service -n prod -p '{"spec":{"selector":{"color":"green"}}}'
+
     # Scale down orderquery-service-blue deployment
     kubectl scale deployment orderquery-service-blue --replicas=0
 
@@ -27,12 +29,18 @@ elif kubectl get deployment orderquery-service-green | grep "1/1" &> /dev/null; 
         sleep 5
     done
 
+    kubectl patch service orderquery-service -n prod -p '{"spec":{"selector":{"color":"blue"}}}'
+
     # Scale down orderquery-service-green deployment
     kubectl scale deployment orderquery-service-green --replicas=0
 
     echo "Blue deployment applied, and green deployment scaled down."
 else
     echo "orderquery-service-green deployment not found."
+    echo "start orderquery service"
+
+    kubectl apply -f service/orderquery/blue-deployment.yml
+    kubectl apply -f service/orderquery/blue-service.yml
     exit 1
 fi
 

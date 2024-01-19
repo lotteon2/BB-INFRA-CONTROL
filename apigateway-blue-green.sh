@@ -10,6 +10,8 @@ if kubectl get deployment apigateway-service-blue &> /dev/null; then
         sleep 5
     done
 
+    kubectl patch service apigateway-service -n prod -p '{"spec":{"selector":{"color":"green"}}}'
+
     # Scale down apigateway-service-blue deployment
     kubectl scale deployment apigateway-service-blue --replicas=0
 
@@ -27,12 +29,18 @@ elif kubectl get deployment apigateway-service-green &> /dev/null; then
         sleep 5
     done
 
+    kubectl patch service apigateway-service -n prod -p '{"spec":{"selector":{"color":"blue"}}}'
+
     # Scale down apigateway-service-green deployment
     kubectl scale deployment apigateway-service-green --replicas=0
 
     echo "Blue deployment applied, and green deployment scaled down."
 else
     echo "apigateway-service-green deployment not found."
+    echo "start apigateway service"
+
+    kubectl apply -f service/apigateway/blue-deployment.yml
+    kubectl apply -f service/apigateway/blue-service.yml
     exit 1
 fi
 

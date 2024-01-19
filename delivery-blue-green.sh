@@ -10,6 +10,8 @@ if kubectl get deployment delivery-service-blue | grep "1/1" &> /dev/null; then
         sleep 5
     done
 
+    kubectl patch service delivery-service -n prod -p '{"spec":{"selector":{"color":"green"}}}'
+
     # Scale down delivery-service-blue deployment
     kubectl scale deployment delivery-service-blue --replicas=0
 
@@ -27,12 +29,22 @@ elif kubectl get deployment delivery-service-green | grep "1/1" &> /dev/null; th
         sleep 5
     done
 
+    kubectl patch service delivery-service -n prod -p '{"spec":{"selector":{"color":"blue"}}}'
+
     # Scale down delivery-service-green deployment
     kubectl scale deployment delivery-service-green --replicas=0
 
     echo "Blue deployment applied, and green deployment scaled down."
 else
     echo "delivery-service-green deployment not found."
+    echo "start delivery service"
+
+    kubectl apply -f database/delivery/initdb-config.yml
+    kubectl apply -f database/delivery/pv-pvc.yml
+    kubectl apply -f database/delivery/statefulset.yml
+    kubectl apply -f database/delivery/service.yml
+    kubectl apply -f service/delivery/blue-deployment.yml
+    kubectl apply -f service/delivery/blue-service.yml
     exit 1
 fi
 

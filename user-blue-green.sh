@@ -10,6 +10,8 @@ if kubectl get deployment user-service-blue &> /dev/null; then
         sleep 5
     done
 
+    kubectl patch service user-service -n prod -p '{"spec":{"selector":{"color":"green"}}}'
+
     # Scale down user-service-blue deployment
     kubectl scale deployment user-service-blue --replicas=0
 
@@ -27,12 +29,22 @@ elif kubectl get deployment user-service-green &> /dev/null; then
         sleep 5
     done
 
+    kubectl patch service user-service -n prod -p '{"spec":{"selector":{"color":"blue"}}}'
+
     # Scale down user-service-green deployment
     kubectl scale deployment user-service-green --replicas=0
 
     echo "Blue deployment applied, and green deployment scaled down."
 else
     echo "user-service-green deployment not found."
+    echo "start user service"
+
+    kubectl apply -f database/user/initdb-config.yml
+    kubectl apply -f database/user/pv-pvc.yml
+    kubectl apply -f database/user/statefulset.yml
+    kubectl apply -f database/user/service.yml
+    kubectl apply -f service/user/blue-deployment.yml
+    kubectl apply -f service/user/blue-service.yml
     exit 1
 fi
 
