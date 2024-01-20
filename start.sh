@@ -40,8 +40,8 @@ kubectl apply -f service/config/config-local.yml
 kubectl apply -f service/config/deployment.yml
 kubectl apply -f service/config/service.yml
 
-kubectl apply -f service/apigateway/deployment.yml
-kubectl apply -f service/apigateway/service.yml
+kubectl apply -f service/apigateway/blue-deployment.yml
+kubectl apply -f service/apigateway/blue-service.yml
 
 kubectl apply -f service/orderquery/deployment.yml
 kubectl apply -f service/orderquery/service.yml

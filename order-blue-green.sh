@@ -10,7 +10,7 @@
 #kubectl apply -f database/order/service.yml
 
 # Check if order-service-blue deployment is running
-if kubectl get deployment order-service-blue | grep "2/2" &> /dev/null; then
+if kubectl get deployment order-service-blue | grep "1/1" &> /dev/null; then
     # Apply order-service-green deployment
     kubectl apply -f service/order/green-deployment.yml
 
@@ -28,7 +28,7 @@ if kubectl get deployment order-service-blue | grep "2/2" &> /dev/null; then
     echo "Blue deployment applied, and blue deployment scaled down."
 
 # Check if order-service-green deployment is running
-elif kubectl get deployment order-service-green | grep "2/2" &> /dev/null; then
+elif kubectl get deployment order-service-green | grep "1/1" &> /dev/null; then
     echo "order-service-blue deployment not found."
     # Apply order-service-blue deployment
     kubectl apply -f service/order/blue-deployment.yml

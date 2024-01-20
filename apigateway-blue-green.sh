@@ -1,8 +1,10 @@
+kubectl apply -f service/apigateway/deployment.yml
+kubectl apply -f service/apigateway/service.yml
 
 # Check if apigateway-service-blue deployment is running
 if kubectl get deployment apigateway-service-blue &> /dev/null; then
     # Apply apigateway-service-green deployment
-    kubectl apply -f service/product/green-deployment.yml
+    kubectl apply -f service/apigateway/green-deployment.yml
 
     # Wait for apigateway-service-green pods to be ready
     until kubectl get pods -l app=apigateway-service,color=green | grep "1/1" &> /dev/null; do
@@ -21,7 +23,7 @@ if kubectl get deployment apigateway-service-blue &> /dev/null; then
 elif kubectl get deployment apigateway-service-green &> /dev/null; then
     echo "apigateway-service-blue deployment not found."
     # Apply apigateway-service-blue deployment
-    kubectl apply -f service/product/blue-deployment.yml
+    kubectl apply -f service/apigateway/blue-deployment.yml
 
     # Wait for apigateway-service-blue pods to be ready
     until kubectl get pods -l app=apigateway-service,color=blue | grep "1/1" &> /dev/null; do

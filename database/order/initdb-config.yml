@@ -103,7 +103,7 @@ data:
 
 
     CREATE TABLE `settlement` (
-      `settlement_id` bigint NOT NULL,
+      `settlement_id` BIGINT NOT NULL AUTO_INCREMENT,
       created_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,
       is_deleted         bit DEFAULT false          null,
       updated_at         datetime(6) DEFAULT CURRENT_TIMESTAMP(6)  null,

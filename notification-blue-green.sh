@@ -1,3 +1,12 @@
+#kubectl delete service notification-db
+#kubectl delete statefulset notification-db
+#kubectl delete pvc pvc-notification
+#kubectl delete pv pv-notification
+#
+#kubectl apply -f database/notification/initdb-config.yml
+#kubectl apply -f database/notification/pv-pvc.yml
+#kubectl apply -f database/notification/statefulset.yml
+#kubectl apply -f database/notification/service.yml
 
 # Check if notification-service-blue deployment is running
 if kubectl get deployment notification-service-blue | grep "1/1" &> /dev/null; then

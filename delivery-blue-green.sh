@@ -1,3 +1,12 @@
+#kubectl delete service delivery-db
+#kubectl delete statefulset delivery-db
+#kubectl delete pvc pvc-delivery
+#kubectl delete pv pv-delivery
+#
+#kubectl apply -f database/delivery/initdb-config.yml
+#kubectl apply -f database/delivery/pv-pvc.yml
+#kubectl apply -f database/delivery/statefulset.yml
+#kubectl apply -f database/delivery/service.yml
 
 # Check if delivery-service-blue deployment is running
 if kubectl get deployment delivery-service-blue | grep "1/1" &> /dev/null; then

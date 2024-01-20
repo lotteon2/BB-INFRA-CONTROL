@@ -1,3 +1,12 @@
+#kubectl delete service product-db
+#kubectl delete statefulset product-db
+#kubectl delete pvc pvc-product
+#kubectl delete pv pv-product
+#
+#kubectl apply -f database/product/initdb-config.yml
+#kubectl apply -f database/product/pv-pvc.yml
+#kubectl apply -f database/product/statefulset.yml
+#kubectl apply -f database/product/service.yml
 
 # Check if product-service-blue deployment is running
 if kubectl get deployment product-service-blue | grep "2/2" &> /dev/null; then

@@ -14,5 +14,7 @@ spec:
               env:
                 - name: USE_PROFILE
                   value: prod
+                - name: NOW
+                  value: $(date +"%Y%m%d")
           restartPolicy: OnFailure
-  schedule: "*/10 * * * *"
+  schedule: "*/30 * * * *"

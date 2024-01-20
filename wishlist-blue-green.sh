@@ -1,6 +1,15 @@
+#kubectl delete service wishlist-db
+#kubectl delete statefulset wishlist-db
+#kubectl delete pvc pvc-wishlist
+#kubectl delete pv pv-wishlist
+#
+#kubectl apply -f database/wishlist/initdb-config.yml
+#kubectl apply -f database/wishlist/pv-pvc.yml
+#kubectl apply -f database/wishlist/statefulset.yml
+#kubectl apply -f database/wishlist/service.yml
 
 # Check if wishlist-service-blue deployment is running
-if kubectl get deployment wishlist-service-blue &> /dev/null; then
+if kubectl get deployment wishlist-service-blue | grep "1/1" &> /dev/null; then
     # Apply wishlist-service-green deployment
     kubectl apply -f service/wishlist/green-deployment.yml
 
@@ -18,7 +27,7 @@ if kubectl get deployment wishlist-service-blue &> /dev/null; then
     echo "Blue deployment applied, and blue deployment scaled down."
 
 # Check if wishlist-service-green deployment is running
-elif kubectl get deployment wishlist-service-green &> /dev/null; then
+elif kubectl get deployment wishlist-service-green | grep "1/1" &> /dev/null; then
     echo "wishlist-service-blue deployment not found."
     # Apply wishlist-service-blue deployment
     kubectl apply -f service/wishlist/blue-deployment.yml

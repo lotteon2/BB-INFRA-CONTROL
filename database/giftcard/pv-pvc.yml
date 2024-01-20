@@ -14,8 +14,8 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: giftcard-pv-class # 특정 스토리지 클래스가 있는 pv는 해당 스토리지 클래스에 맞는 pvc 와만 연결됨
-  persistentVolumeReclaimPolicy: Retain # pv가 해제 되었을 때 초기화 옵션
-#  persistentVolumeReclaimPolicy: Delete # pv가 해제 되었을 때 초기화 옵션
+#  persistentVolumeReclaimPolicy: Retain # pv가 해제 되었을 때 초기화 옵션
+  persistentVolumeReclaimPolicy: Delete # pv가 해제 되었을 때 초기화 옵션
   # pv 볼륨 플러그인 명시
   # path 는 마운트 시킬 로컬 서버의 경로
   hostPath:

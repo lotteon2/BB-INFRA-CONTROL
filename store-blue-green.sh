@@ -1,4 +1,4 @@
-
+#
 #kubectl delete service store-db
 #kubectl delete statefulset store-db
 #kubectl delete pvc pvc-store

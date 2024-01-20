@@ -1,6 +1,15 @@
+#kubectl delete service user-db
+#kubectl delete statefulset user-db
+#kubectl delete pvc pvc-user
+#kubectl delete pv pv-user
+#
+#kubectl apply -f database/user/initdb-config.yml
+#kubectl apply -f database/user/pv-pvc.yml
+#kubectl apply -f database/user/statefulset.yml
+#kubectl apply -f database/user/service.yml
 
 # Check if user-service-blue deployment is running
-if kubectl get deployment user-service-blue &> /dev/null; then
+if kubectl get deployment user-service-blue | grep "1/1" &> /dev/null; then
     # Apply user-service-green deployment
     kubectl apply -f service/user/green-deployment.yml
 
@@ -18,7 +27,7 @@ if kubectl get deployment user-service-blue &> /dev/null; then
     echo "Blue deployment applied, and blue deployment scaled down."
 
 # Check if user-service-green deployment is running
-elif kubectl get deployment user-service-green &> /dev/null; then
+elif kubectl get deployment user-service-green | grep "1/1" &> /dev/null; then
     echo "user-service-blue deployment not found."
     # Apply user-service-blue deployment
     kubectl apply -f service/user/blue-deployment.yml

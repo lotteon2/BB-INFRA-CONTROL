@@ -1,3 +1,12 @@
+#kubectl delete service giftcard-db
+#kubectl delete statefulset giftcard-db
+#kubectl delete pvc pvc-giftcard
+#kubectl delete pv pv-giftcard
+#
+#kubectl apply -f database/giftcard/initdb-config.yml
+#kubectl apply -f database/giftcard/pv-pvc.yml
+#kubectl apply -f database/giftcard/statefulset.yml
+#kubectl apply -f database/giftcard/service.yml
 
 # Check if giftcard-service-blue deployment is running
 if kubectl get deployment giftcard-service-blue | grep "1/1" &> /dev/null; then

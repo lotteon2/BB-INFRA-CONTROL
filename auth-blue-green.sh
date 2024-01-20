@@ -1,3 +1,12 @@
+#kubectl delete service auth-db
+#kubectl delete statefulset auth-db
+#kubectl delete pvc pvc-auth
+#kubectl delete pv pv-auth
+#
+#kubectl apply -f database/auth/initdb-config.yml
+#kubectl apply -f database/auth/pv-pvc.yml
+#kubectl apply -f database/auth/statefulset.yml
+#kubectl apply -f database/auth/service.yml
 
 # Check if auth-service-blue deployment is running
 if kubectl get deployment auth-service-blue | grep "1/1" &> /dev/null; then

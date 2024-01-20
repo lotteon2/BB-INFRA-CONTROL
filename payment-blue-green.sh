@@ -1,4 +1,4 @@
-#
+
 #kubectl delete service payment-db
 #kubectl delete statefulset payment-db
 #kubectl delete pvc pvc-payment
