@@ -1,8 +1,8 @@
-kubectl apply -f service/apigateway/deployment.yml
-kubectl apply -f service/apigateway/service.yml
+#kubectl apply -f service/apigateway/deployment.yml
+#kubectl apply -f service/apigateway/service.yml
 
 # Check if apigateway-service-blue deployment is running
-if kubectl get deployment apigateway-service-blue &> /dev/null; then
+if kubectl get deployment apigateway-service-blue | grep "2/2" &> /dev/null; then
     # Apply apigateway-service-green deployment
     kubectl apply -f service/apigateway/green-deployment.yml
 
@@ -20,7 +20,7 @@ if kubectl get deployment apigateway-service-blue &> /dev/null; then
     echo "Blue deployment applied, and blue deployment scaled down."
 
 # Check if apigateway-service-green deployment is running
-elif kubectl get deployment apigateway-service-green &> /dev/null; then
+elif kubectl get deployment apigateway-service-green | grep "2/2" &> /dev/null; then
     echo "apigateway-service-blue deployment not found."
     # Apply apigateway-service-blue deployment
     kubectl apply -f service/apigateway/blue-deployment.yml
