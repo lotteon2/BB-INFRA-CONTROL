@@ -17,4 +17,4 @@ spec:
                 - name: NOW
                   value: $(date +"%Y%m%d")
           restartPolicy: OnFailure
-  schedule: "*/30 * * * *"
+  schedule: "0 23 */1 * *"

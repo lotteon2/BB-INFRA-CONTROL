@@ -25,7 +25,7 @@ spec:
             - containerPort: 8000
           resources:
             requests:
-              memory: "250Mi"
+              memory: "500Mi"
           env:
             - name: USE_PROFILE
               value: "prod"
